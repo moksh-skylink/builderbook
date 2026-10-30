@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuilderBook — Interactive UI Mockup & Feature Showcase</title>
+  <!-- Tailwind CSS via CDN for instant high-fidelity styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark ::-webkit-scrollbar-thumb { background: #334155; }
+    
+    .feature-badge {
+      animation: pulse-soft 3s infinite;
+    }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(0.98); }
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 antialiased font-sans transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100 flex flex-col">
+
+  <!-- TOP ANNOUNCEMENT / PROTOTYPE CONTROLS BAR -->
+  <div class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white px-4 py-2.5 text-xs border-b border-indigo-700/50 shrink-0">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-400/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          DEMO & FEATURE VISUALIZER
+        </span>
+        <span class="text-slate-200 font-medium hidden sm:inline">BuilderBook (Skylink) Real Estate & Project Ledger UI Mockup</span>
+      </div>
+
+      <!-- Quick Role & Theme Switcher for Interactive Evaluation -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1 bg-black/30 rounded-lg p-1 border border-white/10">
+          <span class="text-slate-400 text-[11px] px-1.5 font-medium">Role Preview:</span>
+          <button onclick="setRole('ADMIN')" id="role-admin-btn" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-600 text-white transition">Admin</button>
+          <button onclick="setRole('RECEIVER')" id="role-receiver-btn" class="px-2 py-0.5 rounded text-[11px] font-medium text-slate-300 hover:text-white transition">Receiver</button>
+          <button onclick="setRole('CA')" id="role-ca-btn" class="px-2 py-0.5 rounded text-[11px] font-medium text-slate-300 hover:text-white transition">CA</button>
+        </div>
+
+        <button onclick="toggleDarkMode()" class="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-md text-[11px] font-medium text-slate-200 transition">
+          <i data-lucide="moon" class="w-3.5 h-3.5 dark:hidden"></i>
+          <i data-lucide="sun" class="w-3.5 h-3.5 hidden dark:inline"></i>
+          <span id="theme-btn-text">Dark Mode</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex overflow-hidden">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0 transition-all duration-300">
+      <!-- App Brand Logo -->
+      <div class="h-16 flex items-center px-5 border-b border-slate-200/80 dark:border-slate-800/80 gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20 font-bold text-lg">
+          <i data-lucide="building-2" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-bold text-sm tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+            BuilderBook
+            <span class="text-[9px] uppercase px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-extrabold border border-indigo-200 dark:border-indigo-800">v2.4</span>
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium">Skylink Infosolutions</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+        <div>
+          <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Main Navigation</div>
+          <nav class="space-y-1">
+            <!-- Dashboard -->
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition text-indigo-700 bg-indigo-50/80 dark:bg-indigo-950/50 dark:text-indigo-300">
+              <span class="p-1 rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/80 dark:text-indigo-300">
+                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              </span>
+              <span>Dashboard</span>
+              <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 bg-indigo-200 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 rounded-md">Live</span>
+            </button>
+
+            <!-- Projects -->
+            <button onclick="switchTab('projects')" id="nav-projects" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">
+                <i data-lucide="building" class="w-4 h-4"></i>
+              </span>
+              <span>Projects</span>
+              <span class="ml-auto text-xs text-slate-400 font-medium">4</span>
+            </button>
+
+            <!-- Units -->
+            <button onclick="switchTab('units')" id="nav-units" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-cyan-100 text-cyan-600 dark:bg-cyan-900/40 dark:text-cyan-400">
+                <i data-lucide="home" class="w-4 h-4"></i>
+              </span>
+              <span>Units & Inventory</span>
+              <span class="ml-auto text-xs text-slate-400 font-medium">128</span>
+            </button>
+
+            <!-- Payment Entries -->
+            <button onclick="switchTab('entries')" id="nav-entries" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
+                <i data-lucide="receipt" class="w-4 h-4"></i>
+              </span>
+              <span>Payment Entries</span>
+              <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-200 rounded-full">3 New</span>
+            </button>
+          </nav>
+        </div>
+
+        <div>
+          <div class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Management & System</div>
+          <nav class="space-y-1">
+            <!-- Users -->
+            <button onclick="switchTab('users')" id="nav-users" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-400">
+                <i data-lucide="users" class="w-4 h-4"></i>
+              </span>
+              <span>Users & Roles</span>
+            </button>
+
+            <!-- Notifications -->
+            <button onclick="switchTab('notifications')" id="nav-notifications" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-rose-100 text-rose-600 dark:bg-rose-900/40 dark:text-rose-400">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+              </span>
+              <span>Notifications</span>
+              <span class="ml-auto w-2 h-2 rounded-full bg-rose-500"></span>
+            </button>
+
+            <!-- Account -->
+            <button onclick="switchTab('account')" id="nav-account" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition">
+              <span class="p-1 rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+                <i data-lucide="user-round" class="w-4 h-4"></i>
+              </span>
+              <span>Account & Security</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Current User Profile in Footer -->
+      <div class="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800 cursor-pointer transition">
+          <div class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs ring-2 ring-indigo-200 dark:ring-indigo-950">
+            MA
+          </div>
+          <div class="flex-1 min-w-0">
+            <div id="sidebar-user-name" class="font-semibold text-xs text-slate-900 dark:text-white truncate">Moksh Admin</div>
+            <div id="sidebar-user-role" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold uppercase flex items-center gap-1">
+              <i data-lucide="shield-check" class="w-3 h-3"></i> ADMIN ROLE
+            </div>
+          </div>
+          <i data-lucide="log-out" class="w-4 h-4 text-slate-400 hover:text-rose-500 transition"></i>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN APP WORKSPACE -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50 dark:bg-slate-950">
+      
+      <!-- TOP HEADER NAVBAR -->
+      <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between gap-4 shrink-0">
+        <!-- Global Search Bar Mockup -->
+        <div class="flex-1 max-w-md relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </div>
+          <input type="text" placeholder="Search projects, units, payers, cheques... (Ctrl + K)" 
+                 class="w-full pl-9 pr-14 py-2 text-xs bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:ring-2 focus:ring-indigo-500 transition">
+          <kbd class="absolute right-2.5 top-2.5 px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600">⌘K</kbd>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-3">
+          <!-- Quick Action Button -->
+          <button onclick="openModal('entryModal')" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm shadow-indigo-500/20 transition active:scale-95">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">New Payment Entry</span>
+          </button>
+
+          <!-- Notification Bell -->
+          <div class="relative">
+            <button onclick="switchTab('notifications')" class="p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+              <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white dark:ring-slate-900"></span>
+            </button>
+          </div>
+
+          <!-- Documentation / Layout Guide Pill -->
+          <button onclick="openModal('guideModal')" class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-indigo-500"></i>
+            <span class="hidden md:inline font-medium">Layout Info</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW CONTAINER (SCROLLABLE CONTENT AREA) -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: DASHBOARD TAB                      -->
+        <!-- ========================================== -->
+        <div id="view-dashboard" class="space-y-6">
+          <!-- Header Banner -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-800 p-6 rounded-2xl text-white shadow-lg shadow-indigo-500/10 relative overflow-hidden">
+            <div class="relative z-10">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 text-indigo-100 text-xs font-medium backdrop-blur-sm mb-2">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i> Real Estate Collections & Site Progress
+              </div>
+              <h1 class="text-2xl font-bold tracking-tight">Welcome back, Moksh!</h1>
+              <p class="text-indigo-100 text-sm mt-1 max-w-xl">
+                Here is your live summary across active residential and commercial projects. Track site collections, pending receipts, and unit inventory in one unified ledger.
+              </p>
+            </div>
+            <div class="relative z-10 flex flex-wrap gap-2.5">
+              <button onclick="openModal('projectModal')" class="px-3.5 py-2 rounded-xl bg-white text-indigo-700 font-semibold text-xs hover:bg-indigo-50 shadow-md transition flex items-center gap-1.5">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Project
+              </button>
+              <button onclick="openModal('entryModal')" class="px-3.5 py-2 rounded-xl bg-indigo-500/50 hover:bg-indigo-500/70 border border-white/20 text-white font-semibold text-xs transition flex items-center gap-1.5 backdrop-blur-sm">
+                <i data-lucide="receipt" class="w-4 h-4"></i> Record Payment
+              </button>
+            </div>
+            <!-- Decorative circle blur -->
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+          </div>
+
+          <!-- STATS CARDS (4-GRID) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Active Projects -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-700 transition">
+              <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                <span class="text-xs font-semibold uppercase tracking-wider">Active Projects</span>
+                <span class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+                  <i data-lucide="building-2" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-white">4</span>
+                <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> 100% on schedule
+                </span>
+              </div>
+              <div class="mt-2 text-xs text-slate-400">Greenwood, Skylink Heights & 2 more</div>
+            </div>
+
+            <!-- Total Collections -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-emerald-300 dark:hover:border-emerald-700 transition">
+              <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                <span class="text-xs font-semibold uppercase tracking-wider">Total Collected</span>
+                <span class="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400">
+                  <i data-lucide="indian-rupee" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-white">₹ 4,82,50,000</span>
+                <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
+                  <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> +14.2% MoM
+                </span>
+              </div>
+              <div class="mt-2 text-xs text-slate-400">₹ 38.5L received this week</div>
+            </div>
+
+            <!-- Pending Review / Settling -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-amber-300 dark:hover:border-amber-700 transition">
+              <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                <span class="text-xs font-semibold uppercase tracking-wider">Pending Settlement</span>
+                <span class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                  <i data-lucide="clock" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-2xl font-extrabold text-amber-600 dark:text-amber-400">6 Entries</span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300">
+                  ₹ 18,20,000
+                </span>
+              </div>
+              <div class="mt-2 text-xs text-slate-400">Awaiting CA verification & bank match</div>
+            </div>
+
+            <!-- Unit Occupancy / Sales -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-cyan-300 dark:hover:border-cyan-700 transition">
+              <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                <span class="text-xs font-semibold uppercase tracking-wider">Inventory Status</span>
+                <span class="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950 text-cyan-600 dark:text-cyan-400">
+                  <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                </span>
+              </div>
+              <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-2xl font-extrabold text-slate-900 dark:text-white">92 / 128</span>
+                <span class="text-xs font-semibold text-cyan-600 dark:text-cyan-400">71.8% Sold</span>
+              </div>
+              <div class="mt-2 text-xs text-slate-400">24 Booked &bull; 12 Available</div>
+            </div>
+          </div>
+
+          <!-- TWO-COLUMN SECTION: RECENT ENTRIES TABLE & QUICK PROJECT STATUS -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left 2 Cols: Recent Payment Entries Ledger -->
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i data-lucide="receipt" class="w-4 h-4 text-indigo-500"></i>
+                    Recent Payment Entries
+                  </h2>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">Daily site collections, buyer milestone payments, and cheque vouchers</p>
+                </div>
+                <button onclick="switchTab('entries')" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+                  View All <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <!-- Table -->
+              <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                    <tr>
+                      <th class="py-3 px-4">Receipt / Date</th>
+                      <th class="py-3 px-4">Project & Unit</th>
+                      <th class="py-3 px-4">Payer Details</th>
+                      <th class="py-3 px-4">Amount</th>
+                      <th class="py-3 px-4">Status</th>
+                      <th class="py-3 px-4 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                    <!-- Row 1 -->
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td class="py-3.5 px-4">
+                        <div class="font-mono font-bold text-slate-900 dark:text-white">REC-2026-089</div>
+                        <div class="text-[11px] text-slate-400">Oct 29, 2026</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-semibold text-slate-900 dark:text-white">Greenwood Residency</div>
+                        <div class="text-[11px] text-slate-400 font-mono">Tower A &bull; Flat #402</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-medium text-slate-900 dark:text-white">Vikram Malhotra</div>
+                        <div class="text-[11px] text-slate-400">HDFC Bank Cheque #49201</div>
+                      </td>
+                      <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">
+                        ₹ 5,50,000
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                          PENDING
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4 text-right space-x-1">
+                        <button onclick="previewReceiptModal('REC-2026-089', 'Vikram Malhotra', '₹ 5,50,000', 'Greenwood Flat #402', 'HDFC Cheque slip submitted at site office')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="View Receipt Photo">
+                          <i data-lucide="image" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button onclick="settleEntryMock(this, 'REC-2026-089')" class="settle-btn px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-[11px] transition">
+                          Settle
+                        </button>
+                      </td>
+                    </tr>
+
+                    <!-- Row 2 -->
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td class="py-3.5 px-4">
+                        <div class="font-mono font-bold text-slate-900 dark:text-white">REC-2026-088</div>
+                        <div class="text-[11px] text-slate-400">Oct 28, 2026</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-semibold text-slate-900 dark:text-white">Skylink Heights</div>
+                        <div class="text-[11px] text-slate-400 font-mono">Block B &bull; Flat #1204</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-medium text-slate-900 dark:text-white">Ananya Sharma</div>
+                        <div class="text-[11px] text-slate-400">NEFT Ref: UTIB0002931</div>
+                      </td>
+                      <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">
+                        ₹ 12,00,000
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                          <i data-lucide="check-circle" class="w-3 h-3"></i>
+                          SETTLED
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4 text-right">
+                        <button onclick="previewReceiptModal('REC-2026-088', 'Ananya Sharma', '₹ 12,00,000', 'Skylink Heights Flat #1204', 'Direct RTGS to ESCROW Account')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="View Receipt">
+                          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <!-- Row 3 -->
+                    <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition">
+                      <td class="py-3.5 px-4">
+                        <div class="font-mono font-bold text-slate-900 dark:text-white">REC-2026-087</div>
+                        <div class="text-[11px] text-slate-400">Oct 28, 2026</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-semibold text-slate-900 dark:text-white">Urban Square Commercial</div>
+                        <div class="text-[11px] text-slate-400 font-mono">Retail Ground &bull; Shop #G-08</div>
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <div class="font-medium text-slate-900 dark:text-white">Rajesh & Sons Traders</div>
+                        <div class="text-[11px] text-slate-400">Cash Deposit Site Counter</div>
+                      </td>
+                      <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">
+                        ₹ 2,00,000
+                      </td>
+                      <td class="py-3.5 px-4">
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                          <i data-lucide="check-circle" class="w-3 h-3"></i>
+                          SETTLED
+                        </span>
+                      </td>
+                      <td class="py-3.5 px-4 text-right">
+                        <button onclick="previewReceiptModal('REC-2026-087', 'Rajesh & Sons Traders', '₹ 2,00,000', 'Shop #G-08', 'Cash voucher signed by site manager')" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="View Receipt">
+                          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right 1 Col: Active Project Cards Summary -->
+            <div class="space-y-4">
+              <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+                    <i data-lucide="layers" class="w-4 h-4 text-emerald-500"></i>
+                    Portfolio Projects
+                  </h3>
+                  <button onclick="switchTab('projects')" class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">Manage</button>
+                </div>
+
+                <div class="space-y-3">
+                  <!-- Project Item 1 -->
+                  <div class="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-indigo-200 dark:hover:border-indigo-800 transition">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-xs text-slate-900 dark:text-white">Greenwood Residency</span>
+                      <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">ACTIVE</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400 mt-1">
+                      <i data-lucide="map-pin" class="w-3 h-3"></i> Whitefield, Bengaluru
+                    </div>
+                    <!-- Progress Bar -->
+                    <div class="mt-3">
+                      <div class="flex justify-between text-[11px] mb-1">
+                        <span class="text-slate-500">Sold: 42/48 Units</span>
+                        <span class="font-semibold text-emerald-600">87.5%</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500 rounded-full" style="width: 87.5%"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Project Item 2 -->
+                  <div class="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-indigo-200 dark:hover:border-indigo-800 transition">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-xs text-slate-900 dark:text-white">Skylink Heights</span>
+                      <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">ACTIVE</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400 mt-1">
+                      <i data-lucide="map-pin" class="w-3 h-3"></i> Outer Ring Road, Hyderabad
+                    </div>
+                    <div class="mt-3">
+                      <div class="flex justify-between text-[11px] mb-1">
+                        <span class="text-slate-500">Sold: 36/50 Units</span>
+                        <span class="font-semibold text-indigo-600">72%</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-indigo-500 rounded-full" style="width: 72%"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Project Item 3 -->
+                  <div class="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:border-indigo-200 dark:hover:border-indigo-800 transition">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-xs text-slate-900 dark:text-white">Urban Square Commercial</span>
+                      <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300">COMMERCIAL</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[11px] text-slate-400 mt-1">
+                      <i data-lucide="map-pin" class="w-3 h-3"></i> BKC, Mumbai
+                    </div>
+                    <div class="mt-3">
+                      <div class="flex justify-between text-[11px] mb-1">
+                        <span class="text-slate-500">Sold: 14/30 Units</span>
+                        <span class="font-semibold text-cyan-600">46.6%</span>
+                      </div>
+                      <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div class="h-full bg-cyan-500 rounded-full" style="width: 46.6%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Verification Box (CA role focus) -->
+              <div class="bg-gradient-to-br from-amber-500/10 to-orange-500/5 dark:from-amber-950/30 dark:to-orange-950/20 border border-amber-200/80 dark:border-amber-800/50 rounded-2xl p-5">
+                <div class="flex items-start gap-3">
+                  <span class="p-2 bg-amber-500 text-white rounded-xl shadow-sm">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                  </span>
+                  <div>
+                    <h4 class="font-bold text-xs text-slate-900 dark:text-white">Chartered Accountant Action</h4>
+                    <p class="text-[11px] text-slate-600 dark:text-slate-400 mt-1">
+                      There are <strong>6 unverified payment slips</strong> waiting for bank clearance and tax settlement.
+                    </p>
+                    <button onclick="switchTab('entries')" class="mt-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition">
+                      Review Pending (₹ 18.2L)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: PROJECTS TAB                       -->
+        <!-- ========================================== -->
+        <div id="view-projects" class="space-y-6 hidden">
+          <!-- Page Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Projects Management</h1>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Configure residential townships, commercial complexes, and mixed-use land parcels.</p>
+            </div>
+            <button onclick="openModal('projectModal')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Create New Project
+            </button>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs text-slate-400 font-medium">Filter Type:</span>
+              <button class="px-3 py-1 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">All (4)</button>
+              <button class="px-3 py-1 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">Residential (2)</button>
+              <button class="px-3 py-1 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">Commercial (1)</button>
+              <button class="px-3 py-1 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">Mixed Use (1)</button>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400"></i>
+                <input type="text" placeholder="Search project name or city..." class="pl-8 pr-3 py-1.5 text-xs bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-slate-900 dark:text-slate-100">
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects Grid Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Project Card 1 -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+              <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between">
+                <div>
+                  <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-2">
+                    ACTIVE &bull; RESIDENTIAL
+                  </span>
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white">Greenwood Residency</h3>
+                  <div class="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> Sy No. 44, Whitefield, Bengaluru
+                  </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center font-bold">
+                  <i data-lucide="building-2" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="p-5 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
+                <div class="grid grid-cols-3 gap-2 text-center">
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Total Units</div>
+                    <div class="font-bold text-sm text-slate-800 dark:text-white">48</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Sold</div>
+                    <div class="font-bold text-sm text-emerald-600">42</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Available</div>
+                    <div class="font-bold text-sm text-indigo-600">6</div>
+                  </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">Collected: <strong class="text-slate-800 dark:text-white font-mono">₹ 1.84 Cr</strong></span>
+                  <button onclick="switchTab('units')" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+                    View Units <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 2 -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+              <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between">
+                <div>
+                  <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-2">
+                    ACTIVE &bull; RESIDENTIAL
+                  </span>
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white">Skylink Heights</h3>
+                  <div class="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> Financial District, Hyderabad
+                  </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 flex items-center justify-center font-bold">
+                  <i data-lucide="building" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="p-5 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
+                <div class="grid grid-cols-3 gap-2 text-center">
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Total Units</div>
+                    <div class="font-bold text-sm text-slate-800 dark:text-white">50</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Sold</div>
+                    <div class="font-bold text-sm text-emerald-600">36</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Available</div>
+                    <div class="font-bold text-sm text-indigo-600">14</div>
+                  </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">Collected: <strong class="text-slate-800 dark:text-white font-mono">₹ 2.15 Cr</strong></span>
+                  <button onclick="switchTab('units')" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+                    View Units <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Project Card 3 -->
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
+              <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-start justify-between">
+                <div>
+                  <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 mb-2">
+                    ACTIVE &bull; COMMERCIAL
+                  </span>
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white">Urban Square Commercial</h3>
+                  <div class="text-xs text-slate-400 flex items-center gap-1 mt-1">
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> BKC G-Block, Mumbai
+                  </div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-950 text-cyan-600 flex items-center justify-center font-bold">
+                  <i data-lucide="briefcase" class="w-5 h-5"></i>
+                </div>
+              </div>
+              <div class="p-5 bg-slate-50/50 dark:bg-slate-900/50 space-y-3">
+                <div class="grid grid-cols-3 gap-2 text-center">
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Total Shops</div>
+                    <div class="font-bold text-sm text-slate-800 dark:text-white">30</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Sold</div>
+                    <div class="font-bold text-sm text-emerald-600">14</div>
+                  </div>
+                  <div class="p-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-800">
+                    <div class="text-[10px] text-slate-400">Available</div>
+                    <div class="font-bold text-sm text-indigo-600">16</div>
+                  </div>
+                </div>
+
+                <div class="pt-2 flex items-center justify-between text-xs">
+                  <span class="text-slate-500">Collected: <strong class="text-slate-800 dark:text-white font-mono">₹ 83.5 Lakh</strong></span>
+                  <button onclick="switchTab('units')" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1">
+                    View Units <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: UNITS & INVENTORY TAB              -->
+        <!-- ========================================== -->
+        <div id="view-units" class="space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Units & Inventory</h1>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Floor-wise unit matrix, configurations (2BHK, 3BHK, Retail), sale status and buyer bookings.</p>
+            </div>
+            <button onclick="alert('Demo: Opens Add Unit dialog to define Unit No, Floor, Super Builtup Area & Price')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold shadow-sm transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Add New Unit
+            </button>
+          </div>
+
+          <!-- Unit Filter Controls -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Project Selector Dropdown -->
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Select Project</label>
+                <select class="text-xs bg-slate-100 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 text-slate-900 dark:text-slate-100 font-medium">
+                  <option>Greenwood Residency (48 Units)</option>
+                  <option>Skylink Heights (50 Units)</option>
+                  <option>Urban Square Commercial (30 Units)</option>
+                </select>
+              </div>
+
+              <!-- Status filter -->
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Status</label>
+                <select class="text-xs bg-slate-100 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 text-slate-900 dark:text-slate-100">
+                  <option>All Statuses</option>
+                  <option>AVAILABLE</option>
+                  <option>BOOKED</option>
+                  <option>SOLD</option>
+                </select>
+              </div>
+
+              <!-- Unit Type -->
+              <div>
+                <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Unit Type</label>
+                <select class="text-xs bg-slate-100 dark:bg-slate-800 border-none rounded-lg px-3 py-1.5 text-slate-900 dark:text-slate-100">
+                  <option>All Types</option>
+                  <option>FLAT</option>
+                  <option>SHOP</option>
+                  <option>VILLA</option>
+                  <option>PLOT</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400">Total Shown: <strong>8 Units</strong></span>
+            </div>
+          </div>
+
+          <!-- Units Table -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="py-3 px-4">Unit No.</th>
+                  <th class="py-3 px-4">Block / Floor</th>
+                  <th class="py-3 px-4">Configuration</th>
+                  <th class="py-3 px-4">Super Built-up Area</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Payment Health</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                <!-- Unit 1 -->
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">A-101</td>
+                  <td class="py-3.5 px-4">Tower A &bull; 1st Floor</td>
+                  <td class="py-3.5 px-4 font-medium">3 BHK + 3T (East Facing)</td>
+                  <td class="py-3.5 px-4 font-mono">1,850 sq.ft</td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">SOLD</span>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="text-[11px] font-mono text-emerald-600 font-bold">100% Paid (₹ 1.25 Cr)</div>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button onclick="switchTab('entries')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">Ledger</button>
+                  </td>
+                </tr>
+
+                <!-- Unit 2 -->
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">A-402</td>
+                  <td class="py-3.5 px-4">Tower A &bull; 4th Floor</td>
+                  <td class="py-3.5 px-4 font-medium">3 BHK + 2T (Corner View)</td>
+                  <td class="py-3.5 px-4 font-mono">1,620 sq.ft</td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">BOOKED</span>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="text-[11px] font-mono text-amber-600 font-bold">₹ 45L / ₹ 98L (Stage 3 Due)</div>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button onclick="openModal('entryModal')" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">+ Payment</button>
+                  </td>
+                </tr>
+
+                <!-- Unit 3 -->
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">B-701</td>
+                  <td class="py-3.5 px-4">Tower B &bull; 7th Floor</td>
+                  <td class="py-3.5 px-4 font-medium">2 BHK + 2T (Garden Facing)</td>
+                  <td class="py-3.5 px-4 font-mono">1,240 sq.ft</td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-300">AVAILABLE</span>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="text-[11px] text-slate-400">Base Price: ₹ 74,40,000</div>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button class="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">Book Unit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: PAYMENT ENTRIES REGISTER           -->
+        <!-- ========================================== -->
+        <div id="view-entries" class="space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Payment Entries Register</h1>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Complete audit log of site receipts, bank transfers, cheques and CA reconciliation.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openModal('entryModal')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition">
+                <i data-lucide="plus" class="w-4 h-4"></i> Log New Entry
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Ribbon -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <button class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">All Entries</button>
+              <button class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">Pending Settlement (6)</button>
+              <button class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800">Settled (83)</button>
+            </div>
+
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-slate-400">Date Range:</span>
+              <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg font-mono font-medium text-slate-700 dark:text-slate-300">Oct 01, 2026 — Oct 30, 2026</span>
+            </div>
+          </div>
+
+          <!-- Entries Table with Settlement Workflow -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="py-3 px-4">Receipt ID</th>
+                  <th class="py-3 px-4">Date</th>
+                  <th class="py-3 px-4">Unit Details</th>
+                  <th class="py-3 px-4">Payer & Instrument</th>
+                  <th class="py-3 px-4">Amount</th>
+                  <th class="py-3 px-4">Proof Photo</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4 text-right">CA Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-indigo-600 dark:text-indigo-400">#REC-089</td>
+                  <td class="py-3.5 px-4">29 Oct 2026</td>
+                  <td class="py-3.5 px-4">
+                    <span class="font-bold text-slate-900 dark:text-white">A-402</span> (Greenwood)
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="font-medium text-slate-900 dark:text-white">Vikram Malhotra</div>
+                    <div class="text-[11px] text-slate-400">HDFC Cheque #49201</div>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">₹ 5,50,000</td>
+                  <td class="py-3.5 px-4">
+                    <button onclick="previewReceiptModal('REC-089', 'Vikram Malhotra', '₹ 5,50,000', 'Greenwood A-402', 'Site Cheque copy attached')" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600">
+                      <i data-lucide="paperclip" class="w-3 h-3"></i> 1 Photo
+                    </button>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      PENDING
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button onclick="settleEntryMock(this, 'REC-089')" class="settle-btn px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition">
+                      Settle Entry
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-indigo-600 dark:text-indigo-400">#REC-086</td>
+                  <td class="py-3.5 px-4">27 Oct 2026</td>
+                  <td class="py-3.5 px-4">
+                    <span class="font-bold text-slate-900 dark:text-white">B-201</span> (Skylink Heights)
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="font-medium text-slate-900 dark:text-white">Pooja Hegde</div>
+                    <div class="text-[11px] text-slate-400">ICICI NetBanking Slip</div>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">₹ 8,70,000</td>
+                  <td class="py-3.5 px-4">
+                    <button onclick="previewReceiptModal('REC-086', 'Pooja Hegde', '₹ 8,70,000', 'Skylink B-201', 'Bank transfer receipt screenshot')" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600">
+                      <i data-lucide="paperclip" class="w-3 h-3"></i> 1 Photo
+                    </button>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      PENDING
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button onclick="settleEntryMock(this, 'REC-086')" class="settle-btn px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs transition">
+                      Settle Entry
+                    </button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 font-mono font-bold text-indigo-600 dark:text-indigo-400">#REC-085</td>
+                  <td class="py-3.5 px-4">26 Oct 2026</td>
+                  <td class="py-3.5 px-4">
+                    <span class="font-bold text-slate-900 dark:text-white">Shop #G-08</span> (Urban Square)
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="font-medium text-slate-900 dark:text-white">Rajesh & Sons</div>
+                    <div class="text-[11px] text-slate-400">Cash counter receipt</div>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">₹ 2,00,000</td>
+                  <td class="py-3.5 px-4">
+                    <button onclick="previewReceiptModal('REC-085', 'Rajesh & Sons', '₹ 2,00,000', 'Shop #G-08', 'Cash deposit slip')" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600">
+                      <i data-lucide="paperclip" class="w-3 h-3"></i> 1 Photo
+                    </button>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                      SETTLED
+                    </span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right text-slate-400">
+                    <span class="text-[11px] font-mono">By CA Verma</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: USERS & RBAC ROLES                 -->
+        <!-- ========================================== -->
+        <div id="view-users" class="space-y-6 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Users & Role Access (RBAC)</h1>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Manage site managers, collection receivers, chartered accountants, and admin permissions.</p>
+            </div>
+            <button onclick="alert('Demo: Opens Add User Dialog with Role checkboxes (ADMIN, RECEIVER, CA, VIEWER)')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold shadow-sm transition">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> Invite Team Member
+            </button>
+          </div>
+
+          <!-- Role Explanation Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800">
+              <div class="font-bold text-xs text-purple-700 dark:text-purple-300">ADMIN</div>
+              <div class="text-[11px] text-slate-500 mt-1">Full system control, manage projects, users, settle entries, and global settings.</div>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
+              <div class="font-bold text-xs text-amber-700 dark:text-amber-300">RECEIVER (Site Clerk)</div>
+              <div class="text-[11px] text-slate-500 mt-1">Collect cash/cheques at construction site, upload photos of slips, log new entries.</div>
+            </div>
+            <div class="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800">
+              <div class="font-bold text-xs text-emerald-700 dark:text-emerald-300">CA (Auditor / Accountant)</div>
+              <div class="text-[11px] text-slate-500 mt-1">Verify bank credit, mark entries as SETTLED, tax reports and financial audit.</div>
+            </div>
+            <div class="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+              <div class="font-bold text-xs text-blue-700 dark:text-blue-300">VIEWER (Investor / Client)</div>
+              <div class="text-[11px] text-slate-500 mt-1">Read-only visibility into unit statuses, inventory availability and progress photos.</div>
+            </div>
+          </div>
+
+          <!-- Users Table -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">
+                <tr>
+                  <th class="py-3 px-4">User</th>
+                  <th class="py-3 px-4">Role(s)</th>
+                  <th class="py-3 px-4">Contact</th>
+                  <th class="py-3 px-4">Account Status</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">MA</div>
+                    <div>
+                      <div class="font-bold text-slate-900 dark:text-white">Moksh Agrawal</div>
+                      <div class="text-[11px] text-slate-400">admin@skylink.com</div>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">ADMIN</span>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono">+91 98765 43210</td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 text-emerald-600 font-semibold"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button class="text-xs text-indigo-600 hover:underline">Edit</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-xs">RS</div>
+                    <div>
+                      <div class="font-bold text-slate-900 dark:text-white">Ramesh Singh (Site Clerk)</div>
+                      <div class="text-[11px] text-slate-400">ramesh.site@builderbook.io</div>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">RECEIVER</span>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono">+91 91234 56789</td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 text-emerald-600 font-semibold"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button class="text-xs text-indigo-600 hover:underline">Edit</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40">
+                  <td class="py-3.5 px-4 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">SV</div>
+                    <div>
+                      <div class="font-bold text-slate-900 dark:text-white">Suresh Verma & Associates</div>
+                      <div class="text-[11px] text-slate-400">ca.verma@auditfin.in</div>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">CA</span>
+                  </td>
+                  <td class="py-3.5 px-4 font-mono">+91 99887 76655</td>
+                  <td class="py-3.5 px-4">
+                    <span class="inline-flex items-center gap-1 text-emerald-600 font-semibold"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active</span>
+                  </td>
+                  <td class="py-3.5 px-4 text-right">
+                    <button class="text-xs text-indigo-600 hover:underline">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- VIEW 6: NOTIFICATIONS & ACCOUNT            -->
+        <!-- ========================================== -->
+        <div id="view-notifications" class="space-y-4 hidden">
+          <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Notifications & Alerts</h1>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 divide-y divide-slate-100 dark:divide-slate-800">
+            <div class="py-3 flex items-start gap-3">
+              <span class="p-2 rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><i data-lucide="check-circle" class="w-4 h-4"></i></span>
+              <div>
+                <div class="font-bold text-xs text-slate-900 dark:text-white">Payment Entry #REC-088 Settled</div>
+                <div class="text-[11px] text-slate-500">₹ 12,00,000 settled into ESCROW account by CA Suresh Verma.</div>
+                <div class="text-[10px] text-slate-400 mt-1">2 hours ago</div>
+              </div>
+            </div>
+            <div class="py-3 flex items-start gap-3">
+              <span class="p-2 rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300"><i data-lucide="alert-triangle" class="w-4 h-4"></i></span>
+              <div>
+                <div class="font-bold text-xs text-slate-900 dark:text-white">New Cheque Slip Logged: Greenwood A-402</div>
+                <div class="text-[11px] text-slate-500">Ramesh Singh logged ₹ 5,50,000 for verification.</div>
+                <div class="text-[10px] text-slate-400 mt-1">Yesterday at 5:30 PM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-account" class="space-y-4 hidden">
+          <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Account & Profile Settings</h1>
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 max-w-2xl space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-semibold text-slate-500">First Name</label>
+                <input type="text" value="Moksh" class="w-full mt-1 px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 rounded-lg">
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-slate-500">Last Name</label>
+                <input type="text" value="Agrawal" class="w-full mt-1 px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 rounded-lg">
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-500">Email Address</label>
+              <input type="email" value="admin@skylink.com" readonly class="w-full mt-1 px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 rounded-lg opacity-80 cursor-not-allowed">
+            </div>
+            <button class="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold">Save Profile Changes</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 1: NEW PAYMENT ENTRY DIALOG          -->
+  <!-- ========================================== -->
+  <div id="entryModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="receipt" class="w-5 h-5 text-indigo-600"></i>
+            Record Payment Entry
+          </h3>
+          <p class="text-xs text-slate-400">Log client instalment, token amount or site collection receipt.</p>
+        </div>
+        <button onclick="closeModal('entryModal')" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleNewEntrySubmit(event)" class="space-y-4 mt-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Project *</label>
+            <select class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+              <option>Greenwood Residency</option>
+              <option>Skylink Heights</option>
+              <option>Urban Square Commercial</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Unit *</label>
+            <select class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+              <option>A-402 (Vikram Malhotra)</option>
+              <option>A-101 (Flat)</option>
+              <option>B-701 (Flat)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Amount (₹) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-xs text-slate-400 font-bold">₹</span>
+              <input type="number" required placeholder="500000" class="w-full pl-7 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Date *</label>
+            <input type="date" value="2026-10-30" class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Payer Name *</label>
+          <input type="text" required placeholder="e.g. Vikram Malhotra / HDFC Cheque" class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
+        </div>
+
+        <!-- Receipt / Cheque Photo Upload Area -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Receipt / Cheque Photo Proof</label>
+          <div class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center hover:border-indigo-400 transition cursor-pointer bg-slate-50/50 dark:bg-slate-800/30">
+            <i data-lucide="upload-cloud" class="w-6 h-6 text-indigo-500 mx-auto mb-1"></i>
+            <span class="text-xs text-slate-600 dark:text-slate-300 font-medium">Click to upload photo or drag & drop</span>
+            <div class="text-[10px] text-slate-400 mt-0.5">JPEG, PNG, WebP up to 10MB</div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Notes / Transaction Reference</label>
+          <textarea rows="2" placeholder="Cheque clearance instructions, milestone breakdown..." class="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" onclick="closeModal('entryModal')" class="px-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 font-medium">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-xs rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold">Save Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 2: RECEIPT PHOTO PREVIEW DIALOG      -->
+  <!-- ========================================== -->
+  <div id="receiptModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="file-check" class="w-4 h-4 text-emerald-600"></i>
+            Payment Receipt Document
+          </h3>
+          <span id="modal-receipt-id" class="font-mono text-xs text-indigo-600 dark:text-indigo-400 font-bold">REC-2026-089</span>
+        </div>
+        <button onclick="closeModal('receiptModal')" class="p-1 rounded-lg text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-3">
+        <!-- Visual Mockup of the uploaded cheque / bank voucher -->
+        <div class="w-full h-44 rounded-xl bg-gradient-to-tr from-slate-100 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 border border-dashed border-indigo-200 dark:border-indigo-800 flex flex-col items-center justify-center p-4 text-center relative overflow-hidden">
+          <div class="w-12 h-12 rounded-full bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-2">
+            <i data-lucide="image" class="w-6 h-6"></i>
+          </div>
+          <div class="text-xs font-bold text-slate-800 dark:text-slate-200">Receipt Voucher / Cheque Scan Preview</div>
+          <div id="modal-receipt-note" class="text-[11px] text-slate-400 max-w-xs mt-1">HDFC Cheque slip submitted at site office</div>
+          <span class="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400">SHA256: 48f9...3b92</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+            <span class="text-slate-400 block text-[10px]">Payer</span>
+            <strong id="modal-payer-name" class="text-slate-900 dark:text-white">Vikram Malhotra</strong>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+            <span class="text-slate-400 block text-[10px]">Amount</span>
+            <strong id="modal-amount" class="text-emerald-600 dark:text-emerald-400 font-mono font-bold">₹ 5,50,000</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+        <button class="text-xs text-indigo-600 hover:underline flex items-center gap-1">
+          <i data-lucide="download" class="w-3.5 h-3.5"></i> Download Original File
+        </button>
+        <button onclick="closeModal('receiptModal')" class="px-4 py-1.5 text-xs rounded-xl bg-slate-800 text-white dark:bg-slate-700">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 3: ADD PROJECT DIALOG                -->
+  <!-- ========================================== -->
+  <div id="projectModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="building-2" class="w-5 h-5 text-indigo-600"></i> Add New Real Estate Project
+        </h3>
+        <button onclick="closeModal('projectModal')"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+      </div>
+      <form onsubmit="handleNewProjectSubmit(event)" class="space-y-3 mt-4 text-xs">
+        <div>
+          <label class="font-semibold block mb-1">Project Name *</label>
+          <input type="text" placeholder="e.g. Palm Meadows Villa Enclave" required class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border rounded-xl">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-semibold block mb-1">Type *</label>
+            <select class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border rounded-xl">
+              <option>RESIDENTIAL</option>
+              <option>COMMERCIAL</option>
+              <option>MIXED_USE</option>
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold block mb-1">Status *</label>
+            <select class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border rounded-xl">
+              <option>ACTIVE</option>
+              <option>COMPLETED</option>
+              <option>ARCHIVED</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="font-semibold block mb-1">City & State</label>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" placeholder="City (e.g. Bengaluru)" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 border rounded-xl">
+            <input type="text" placeholder="State (e.g. Karnataka)" class="px-3 py-2 bg-slate-50 dark:bg-slate-800 border rounded-xl">
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-3 border-t">
+          <button type="button" onclick="closeModal('projectModal')" class="px-3 py-1.5 rounded-lg border">Cancel</button>
+          <button type="submit" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-semibold">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 4: ARCHITECTURE & LAYOUT GUIDE       -->
+  <!-- ========================================== -->
+  <div id="guideModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 class="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="layout" class="w-5 h-5 text-indigo-600"></i> BuilderBook Frontend Layout & Feature Guide
+        </h3>
+        <button onclick="closeModal('guideModal')"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+      </div>
+      <div class="py-4 space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p>This mockup visualizes the complete frontend architecture of the <strong>BuilderBook</strong> ERP/CRM system:</p>
+
+        <div class="p-3 bg-indigo-50 dark:bg-indigo-950/50 rounded-xl border border-indigo-200 dark:border-indigo-800">
+          <strong class="text-indigo-700 dark:text-indigo-300 block mb-1 text-sm">1. Core Layout Structure:</strong>
+          <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+            <li><strong>Sidebar:</strong> Dynamic collapsed/expanded navigation with role filtering, colored module icons, and Skylink branding.</li>
+            <li><strong>Header:</strong> Global command search (`⌘K`), quick-create menus, notifications dropdown, and live role badge.</li>
+            <li><strong>Main Stage:</strong> Fluid 2-column or 3-column dashboard responsive layout with card statistics and tables.</li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-emerald-50 dark:bg-emerald-950/50 rounded-xl border border-emerald-200 dark:border-emerald-800">
+          <strong class="text-emerald-700 dark:text-emerald-300 block mb-1 text-sm">2. Key Features Represented:</strong>
+          <ul class="list-disc list-inside space-y-1 text-slate-700 dark:text-slate-300">
+            <li><strong>Payment Entry Register & Settlement:</strong> Receiver records collections on site with photo proof; Chartered Accountant (CA) or Admin settles entries with a 1-click confirmation workflow.</li>
+            <li><strong>Inventory Matrix:</strong> Units categorized by status (Available, Booked, Sold) and configuration (2BHK, 3BHK, Retail Shop).</li>
+            <li><strong>Real Estate Project Portfolio:</strong> Residential, Commercial, and Mixed-Use tracking with unit sales velocity.</li>
+            <li><strong>Role-Based Access Control (RBAC):</strong> Admin, Receiver (Site Clerk), CA (Accountant), and Viewer.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex justify-end pt-2 border-t">
+        <button onclick="closeModal('guideModal')" class="px-4 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT FOR INTERACTIVE TAB SWITCHING AND MOCK ACTIONS -->
+  <script>
+    // Tab switching logic
+    const views = ['dashboard', 'projects', 'units', 'entries', 'users', 'notifications', 'account'];
+    
+    function switchTab(tabName) {
+      views.forEach(v => {
+        const viewEl = document.getElementById('view-' + v);
+        const navEl = document.getElementById('nav-' + v);
+        if (viewEl) {
+          if (v === tabName) {
+            viewEl.classList.remove('hidden');
+          } else {
+            viewEl.classList.add('hidden');
+          }
+        }
+        if (navEl) {
+          if (v === tabName) {
+            navEl.className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm transition text-indigo-700 bg-indigo-50/80 dark:bg-indigo-950/50 dark:text-indigo-300";
+          } else {
+            navEl.className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60 transition";
+          }
+        }
+      });
+      // Scroll to top of main workspace and re-render icons
+      document.querySelector('main > div').scrollTop = 0;
+      setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 10);
+    }
+
+    // Modal controls
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 10);
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Receipt preview modal helper
+    function previewReceiptModal(recId, payer, amount, unit, note) {
+      document.getElementById('modal-receipt-id').textContent = recId;
+      document.getElementById('modal-payer-name').textContent = payer;
+      document.getElementById('modal-amount').textContent = amount;
+      document.getElementById('modal-receipt-note').textContent = unit + " • " + note;
+      openModal('receiptModal');
+    }
+
+    // Settle entry simulation
+    function settleEntryMock(btn, id) {
+      btn.innerText = "Settled ✓";
+      btn.className = "px-2.5 py-1 rounded-lg bg-slate-200 text-slate-600 dark:bg-slate-800 dark:text-slate-400 font-medium text-[11px] cursor-default";
+      btn.disabled = true;
+
+      // Update badge in the parent row
+      const tr = btn.closest('tr');
+      const badge = tr.querySelector('.bg-amber-50, .bg-amber-100, .bg-amber-950');
+      if (badge) {
+        badge.outerHTML = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"><i data-lucide="check-circle" class="w-3 h-3"></i> SETTLED</span>';
+        lucide.createIcons();
+      }
+    }
+
+    // Role switcher simulation
+    function setRole(role) {
+      const userRoleEl = document.getElementById('sidebar-user-role');
+      const adminBtn = document.getElementById('role-admin-btn');
+      const receiverBtn = document.getElementById('role-receiver-btn');
+      const caBtn = document.getElementById('role-ca-btn');
+      
+      [adminBtn, receiverBtn, caBtn].forEach(b => {
+        b.className = "px-2 py-0.5 rounded text-[11px] font-medium text-slate-300 hover:text-white transition";
+      });
+
+      if (role === 'ADMIN') {
+        adminBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-600 text-white transition";
+        userRoleEl.innerHTML = '<i data-lucide="shield-check" class="w-3 h-3"></i> ADMIN ROLE';
+      } else if (role === 'RECEIVER') {
+        receiverBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-600 text-white transition";
+        userRoleEl.innerHTML = '<i data-lucide="receipt" class="w-3 h-3"></i> RECEIVER (SITE)';
+      } else if (role === 'CA') {
+        caBtn.className = "px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-600 text-white transition";
+        userRoleEl.innerHTML = '<i data-lucide="file-check" class="w-3 h-3"></i> CA (SETTLER)';
+      }
+      lucide.createIcons();
+    }
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const isDark = html.classList.toggle('dark');
+      document.getElementById('theme-btn-text').textContent = isDark ? "Light Mode" : "Dark Mode";
+    }
+
+    function handleNewEntrySubmit(e) {
+      e.preventDefault();
+      alert("Demo Action: Entry recorded successfully! Added to Pending Settlement queue.");
+      closeModal('entryModal');
+    }
+
+    function handleNewProjectSubmit(e) {
+      e.preventDefault();
+      alert("Demo Action: Project created successfully!");
+      closeModal('projectModal');
+    }
+
+    // Initialize Lucide icons on load
+    document.addEventListener("DOMContentLoaded", function () {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
